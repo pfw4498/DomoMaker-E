@@ -3,7 +3,7 @@ const handleDomo = (e) => {
 	
 	$("#domoMessage").animate({width:'hide'},350);
 	
-	if ($("#domoName").val() == '' || $("#domoAge").val() == '') {
+	if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoHealth").val() === '') {
 		handleError("RAWR! All fields are recquired");
 		return false;
 	}
@@ -14,6 +14,17 @@ const handleDomo = (e) => {
 	
 	return false;
 };
+
+const cycleImage = (e) => {
+	let num = parseInt(e.target.getAttribute("data-counter"));
+	//console.log(num);
+	num = num + 1;
+	if (num > 5) {
+		num = 0;
+	}
+	e.target.setAttribute("data-counter", num);
+	return e.target.setAttribute("src", `/assets/img/${num}.jpeg`);
+}
 
 const DomoForm = (props) => {
 	return (
@@ -28,6 +39,8 @@ const DomoForm = (props) => {
 			<input id="domoName" type="text" name="name" placeholder="Domo Name" />
 			<label htmlFor="age">Age: </label>
 			<input id="domoAge" type="text" name="age" placeholder="Domo Age" />
+			<label htmlFor="health">Hit Points: </label>
+			<input id="domoHealth" type="text" name="health" placeholder="Domo HP" />
 			<input type="hidden" name="_csrf" value={props.csrf} />
 			<input className="makeDomoSubmit" type="submit" value="Make Domo" />
 		</form>
@@ -46,9 +59,10 @@ const DomoList = function(props) {
 	const domoNodes = props.domos.map(function(domo) {
 		return (
 			<div key={domo._id} className="domo">
-				<img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
+				<img src="/assets/img/0.jpeg" alt="domo face" className="domoFace" data-counter={0} onClick={cycleImage} />
 				<h3 className="domoName"> Name: {domo.name} </h3>
-				<h3 className="domoAge"> Age: {domo.age}</h3>
+				<h3 className="domoAge"> Age: {domo.age} </h3>
+				<h3 className="domoHealth"> HP: {domo.health}</h3>
 			</div>
 		);
 	});

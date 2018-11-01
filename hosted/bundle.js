@@ -5,7 +5,7 @@ var handleDomo = function handleDomo(e) {
 
 	$("#domoMessage").animate({ width: 'hide' }, 350);
 
-	if ($("#domoName").val() == '' || $("#domoAge").val() == '') {
+	if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoHealth").val() === '') {
 		handleError("RAWR! All fields are recquired");
 		return false;
 	}
@@ -15,6 +15,17 @@ var handleDomo = function handleDomo(e) {
 	});
 
 	return false;
+};
+
+var cycleImage = function cycleImage(e) {
+	var num = parseInt(e.target.getAttribute("data-counter"));
+	//console.log(num);
+	num = num + 1;
+	if (num > 5) {
+		num = 0;
+	}
+	e.target.setAttribute("data-counter", num);
+	return e.target.setAttribute("src", "/assets/img/" + num + ".jpeg");
 };
 
 var DomoForm = function DomoForm(props) {
@@ -39,6 +50,12 @@ var DomoForm = function DomoForm(props) {
 			"Age: "
 		),
 		React.createElement("input", { id: "domoAge", type: "text", name: "age", placeholder: "Domo Age" }),
+		React.createElement(
+			"label",
+			{ htmlFor: "health" },
+			"Hit Points: "
+		),
+		React.createElement("input", { id: "domoHealth", type: "text", name: "health", placeholder: "Domo HP" }),
 		React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
 		React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Make Domo" })
 	);
@@ -61,7 +78,7 @@ var DomoList = function DomoList(props) {
 		return React.createElement(
 			"div",
 			{ key: domo._id, className: "domo" },
-			React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo face", className: "domoFace" }),
+			React.createElement("img", { src: "/assets/img/0.jpeg", alt: "domo face", className: "domoFace", "data-counter": 0, onClick: cycleImage }),
 			React.createElement(
 				"h3",
 				{ className: "domoName" },
@@ -73,7 +90,14 @@ var DomoList = function DomoList(props) {
 				"h3",
 				{ className: "domoAge" },
 				" Age: ",
-				domo.age
+				domo.age,
+				" "
+			),
+			React.createElement(
+				"h3",
+				{ className: "domoHealth" },
+				" HP: ",
+				domo.health
 			)
 		);
 	});
